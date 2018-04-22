@@ -7,5 +7,5 @@ import { getCharts, getNotams } from './ais'
 export { getCharts, getNotams }
 
 // Flights Functions
-import { getFlights, getFlightsByDep, getFlightsByArr, getFlightsByCia, getFlightById } from './flights'
-export { getFlights, getFlightsByDep, getFlightsByArr, getFlightsByCia, getFlightById }
+import { getFlights, getFlightsByDep, getFlightsByArr, getFlightsByCompany, getFlightById } from './flights'
+export { getFlights, getFlightsByDep, getFlightsByArr, getFlightsByCompany, getFlightById }

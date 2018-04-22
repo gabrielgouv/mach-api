@@ -16,9 +16,9 @@ export const getFlightsByArr = functions.https.onRequest(async (req, res) => {
   res.send(await flights.getFlightsByArr(req.query))
 })
 
-export const getFlightsByCia = functions.https.onRequest(async (req, res) => {
+export const getFlightsByCompany = functions.https.onRequest(async (req, res) => {
   const flights = new Flights(res)
-  res.send(await flights.getFlightsByCia(req.query))
+  res.send(await flights.getFlightsByCompany(req.query))
 })
 
 export const getFlightById = functions.https.onRequest(async (req, res) => {

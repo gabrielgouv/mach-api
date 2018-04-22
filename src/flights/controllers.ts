@@ -3,7 +3,7 @@ import firestore from './../db'
 import { errorHandler } from '../errorHandler'
 
 // DB Refs
-const routesRef = firestore.collection('rotas')
+const routesRef = firestore.collection('routes')
 
 class Flights {
 
@@ -16,7 +16,7 @@ class Flights {
   getFlights(query) {
     const arr = query.arr || this.res.sendStatus(400)
     const dep = query.dep || this.res.sendStatus(400)
-    return routesRef.where('partida', '==', dep).where('chegada', '==', arr).get()
+    return routesRef.where('departure', '==', dep).where('arrival', '==', arr).get()
       .then(data => {
         const flights = []
         data.forEach(flight => {
@@ -29,7 +29,7 @@ class Flights {
 
   getFlightsByDep(query) {
     const apt = query.apt || this.res.sendStatus(400)
-    return routesRef.where('partida', '==', apt).get()
+    return routesRef.where('departure', '==', apt).get()
       .then(data => {
         const flights = []
         data.forEach(flight => {
@@ -42,7 +42,7 @@ class Flights {
 
   getFlightsByArr(query) {
     const apt = query.apt || this.res.sendStatus(400)
-    return routesRef.where('chegada', '==', apt).get()
+    return routesRef.where('arrival', '==', apt).get()
       .then(data => {
         const flights = []
         data.forEach(flight => {
@@ -53,9 +53,9 @@ class Flights {
       .catch(err => errorHandler(err, this.res))  
   }
 
-  getFlightsByCia(query) {
-    const cia = query.cia || this.res.sendStatus(400)
-    return routesRef.where('cia', '==', cia).get()
+  getFlightsByCompany(query) {
+    const company = query.company || this.res.sendStatus(400)
+    return routesRef.where('company', '==', company).get()
       .then(data => {
         const flights = []
         data.forEach(flight => {
