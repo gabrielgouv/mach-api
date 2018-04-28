@@ -1,4 +1,3 @@
-import * as rp from 'request-promise'
 import firestore from './../db'
 import { errorHandler } from '../errorHandler'
 
