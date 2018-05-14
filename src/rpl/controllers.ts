@@ -27,7 +27,7 @@ class Rpl {
         routes.forEach((doc) => {
           routesRef.doc(doc.id).delete()
         })
-        return console.log(`Database cleaned`)
+        console.log(`Database cleaned`)
       })
   }
 
@@ -68,7 +68,7 @@ class Rpl {
                   .catch(err => errorHandler(err, this.res))
               }
             })
-            return console.log(`Flights from ${fir} has been saved successfully`)
+            console.log(`Flights from ${fir} has been saved successfully`)
           }
         })
       })

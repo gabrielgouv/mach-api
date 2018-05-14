@@ -6,6 +6,16 @@ export { updateRpl }
 import { getAirport } from './airports'
 export { getAirport }
 
-// Flights Functions
-import { getFlights, getFlightsByDep, getFlightsByArr, getFlightsByCompany, getFlightById } from './flights'
-export { getFlights, getFlightsByDep, getFlightsByArr, getFlightsByCompany, getFlightById }
+import * as functions from 'firebase-functions'
+import * as express from 'express'
+import * as cors from 'cors'
+
+// Express
+const app = express()
+app.use(cors({ origin: true }))
+
+// Flight routes
+require('./flights/routes')(app)
+
+const api = functions.https.onRequest(app)
+export { api }
