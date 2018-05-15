@@ -1,4 +1,6 @@
-export function errorHandler(err, res, code = 500) {
-  console.error(err)
-  return res.sendStatus(code)
+export function errorHandler(error, res) {
+  if(error.message === 'Not Found')
+    return res.sendStatus(404)
+  console.error(error)
+  res.sendStatus(500)
 }

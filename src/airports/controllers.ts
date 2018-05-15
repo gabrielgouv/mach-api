@@ -1,21 +1,28 @@
-import * as functions from 'firebase-functions'
+import * as services from '../db/services'
+import { errorHandler } from '../errorHandler'
+import { aisPassword } from '../config'
 import * as rp from 'request-promise'
 import * as xml from 'xml2js'
-import firestore from '../db'
-
 const parseXML = xml.parseString
-const airportsRef = firestore.collection('airports')
 
-export function getData(airport) {
-  return airportsRef.doc(airport).get().then(data => data.data())
+export async function getAirportByIcao(req, res) {
+  try {
+    res.send({
+      data: await services.getEntityById('airports', req.params.icao),
+      charts: await getCharts(req.params.icao),
+      notams: await getNotams(req.params.icao)
+    })
+  } catch (error) {
+    errorHandler(error, res)
+  }
 }
 
-export function getCharts(airport) {
-  return rp(`https://www.aisweb.aer.mil.br/api/?apiKey=1934217367&apiPass=e9062beb-43f1-11e7-a4c1-00505680c1b4&area=cartas&IcaoCode=${airport}`)
+function getCharts(airport) {
+  return rp(`https://www.aisweb.aer.mil.br/api/?apiKey=1934217367&apiPass=${aisPassword}&area=cartas&IcaoCode=${airport}`)
     .then((data) => {
       const charts = []
       parseXML(data, (err, result) => {
-        if (err) throw(err)
+        if (err) throw new Error('Not found')
         result.aisweb.cartas[0].item.forEach(chart => charts.push({
           tipo: chart.tipo[0],
           nome: chart.nome[0],
@@ -27,12 +34,12 @@ export function getCharts(airport) {
     })
 }
 
-export function getNotams(airport) {
-  return rp(`https://www.aisweb.aer.mil.br/api/?apiKey=1934217367&apiPass=e9062beb-43f1-11e7-a4c1-00505680c1b4&area=notam&IcaoCode=${airport}`)
+function getNotams(airport) {
+  return rp(`https://www.aisweb.aer.mil.br/api/?apiKey=1934217367&apiPass=${aisPassword}&area=notam&IcaoCode=${airport}`)
     .then((data) => {
       const notams = []
       parseXML(data, (err, result) => {
-        if (err) throw(err)
+        if (err) throw new Error('Not found')
         result.aisweb.notam[0].item.forEach(notam => notams.push({
           codigo: notam.cod[0],
           status: notam.status[0],
