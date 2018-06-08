@@ -1,45 +1,23 @@
+import * as services from './../db/services'
 import * as rp from 'request-promise'
 import * as moment from 'moment'
 import * as AdmZip from 'adm-zip'
-import * as services from './../db/services'
-import { errorHandler } from '../errorHandler'
-import { rplToken } from '../config'
 
-export async function updateRPL(req, res) {
-  if(req.query.token !== rplToken)
-    return res.sendStatus(403)
-  if(await hasUpdate()) {
-    console.log(`Starting RPL updates at ${moment().format('MMMM Do YYYY, h:mm:ss a')}`)
-    return clearDatabase()
-      .then(async () => {
-        const firs = ['SBAZ', 'SBBS', 'SBCW', 'SBRE']
-        const promises = new Array()
-        for(const fir of firs)
-          await updateFIR(fir)
-        return
-      })
-      .then(() => res.send(`Update conclude sucessfully at ${moment().format('MMMM Do YYYY, h:mm:ss a')}`))
-      .catch(error => errorHandler(error, res))
-  }
-  return res.send('No updates today')
-}
-
-function hasUpdate() : Promise<boolean> {
+export function hasUpdate() {
   return rp(`http://portal.cgna.gov.br/files/abas/${moment().format('YYYY-MM-DD')}/painel_rpl/companhias/Cia_GLO_CS.txt`)
     .then(data => true)
     .catch(err => false)
 }
 
-function clearDatabase() {
-  return services.getEntities('routes', {})
+export function clearDatabase() {
+  return services.getEntities('routes', '')
     .then(data => {
       const promises = []
       data.forEach(entity => promises.push(services.deleteEntityById('routes', entity.id)))
       return Promise.all(promises).then(() => console.log('DB cleaned with success'))
     })
 }
-function updateFIR(fir) {
-  console.log(`Creating promises for ${fir}`)
+export function updateFIR(fir) {
   return rp({
       url: `http://portal.cgna.gov.br/files/abas/${moment().format('YYYY-MM-DD')}/painel_rpl/bdr/RPL${fir}.zip`,
       encoding: null
@@ -79,11 +57,11 @@ function updateFIR(fir) {
           })
         }
       })
-      return Promise.all(promises).then(() => console.log(`Flights from ${fir} has been saved successfully`))
+      return promises
     })
 }
 
-function flightRules(route) {
+export function flightRules(route) {
   if (route.indexOf(' IFR ') !== -1)
     return 'Y'
   else if (route.indexOf(' VFR ') !== -1)
