@@ -1,6 +1,10 @@
-import * as controllers from './controllers'
+import AirportsControllers from './controllers'
+import { Application } from 'express'
 
-export = (app) => {
-  app.get('/airports/:icao', controllers.getAirportByIcao)
-  app.get('/airports/:icao/charts/:type', controllers.getChartsByType)
+export default class AirportsRoutes {
+
+  static routes (app : Application) {
+    app.get('/airports/:icao', AirportsControllers.getAirport)
+  }
+
 }

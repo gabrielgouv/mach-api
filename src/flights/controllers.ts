@@ -1,14 +1,20 @@
-import * as services from '../db/services'
-import { errorHandler } from '../errorHandler'
+import { Request, Response, NextFunction } from 'express'
+import { DBServices } from '../db/services'
 
-export function getFlightById(req, res) {
-  services.getEntityById('routes', req.params.id)
-    .then(data => res.send(data))
-    .catch(error => errorHandler(error, res))
-}
+const services = new DBServices('routes')
 
-export function getFlights(req, res) {
-  services.getEntities('routes', req.query)
-    .then(data => res.send(data))
-    .catch(error => errorHandler(error, res))
+export default class FlightsControllers {
+
+  public static getFlightById(req: Request, res: Response, next: NextFunction): Promise<void | Response> {
+    return services.getEntityById(req.params.id)
+      .then(data => res.send(data))
+      .catch((error: Error) => next(error))
+  }
+  
+  public static getFlights(req: Request, res: Response, next: NextFunction): Promise<void | Response> {
+    return services.getEntities(req.query)
+      .then(data => res.send(data))
+      .catch((error: Error) => next(error))
+  }
+
 }

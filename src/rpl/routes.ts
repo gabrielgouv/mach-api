@@ -1,5 +1,10 @@
-import * as controllers from './controllers'
+import RplControllers from './controllers'
+import { Application } from 'express'
 
-export = (app) => {
-  app.get('/rpl/update', controllers.updateRPL)
+export default class RplRoutes {
+
+  static routes (app : Application) {
+    app.get('/rpl/update', RplControllers.updateRpl)
+  }
+
 }

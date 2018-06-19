@@ -1,6 +1,11 @@
-import * as controllers from './controllers'
+import FlightsControllers from './controllers'
+import { Application } from 'express'
 
-export = (app) => {
-  app.get('/flights', controllers.getFlights)
-  app.get('/flights/:id', controllers.getFlightById)
+export default class FlightsRoutes {
+
+  static routes (app : Application) {
+    app.get('/flights', FlightsControllers.getFlights)
+    app.get('/flights/:id', FlightsControllers.getFlightById)
+  }
+
 }

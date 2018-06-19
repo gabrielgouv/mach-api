@@ -1,38 +1,43 @@
-// Initialize app
 import * as admin from 'firebase-admin'
-const firestore = admin.initializeApp().firestore()
+import { NotFound } from '../errors'
+import { CollectionReference, WriteResult, Firestore, DocumentSnapshot, Query, QueryDocumentSnapshot, QuerySnapshot } from 'firestore'
+const firestore: Firestore = admin.initializeApp().firestore()
 
-export function getEntityById(collection, id) {
-  return firestore.collection(collection).doc(id).get()
-    .then(doc => {
-      if(!doc.exists)
-        throw new Error('Not Found')
-      return doc.data()
-    })
-}
+export class DBServices {
+  private collection: CollectionReference
 
-export function getEntities(collection, query) {
-  let handler : any = firestore.collection(collection)
-  Object.keys(query).forEach(key => {
-    handler = handler.where(key, "==", query[key])
-  })
-  return handler.get()
-    .then((docs) => {
-      if(docs.empty)
-        throw new Error('Not Found')
-      const entities = []
-      docs.forEach(doc => {
-        entities.push(doc.data())
+  constructor (collection: string) {
+    this.collection = firestore.collection(collection)
+  }
+
+  public getEntityById(id: string): Promise<any> {
+    return this.collection.doc(id).get()
+      .then((doc: DocumentSnapshot): object => {
+        if(doc.exists)
+          return doc.data()
+        throw new NotFound()
       })
-      return entities
+  }
+
+  public getEntities(query : object) : Promise<Array<QueryDocumentSnapshot>> {
+    let handler : CollectionReference | Query = this.collection
+    Object.keys(query).forEach(key => {
+      handler = handler.where(key, "==", query[key])
     })
-}
+    return handler.get()
+      .then((result : QuerySnapshot) => {
+        if(result.empty)
+          throw new NotFound()
+        return result.docs.map(doc => doc.data())
+      })
+  }
 
-export function setEntity(collection, entity) {
-  const { id } = entity
-  return firestore.collection(collection).doc(id).set(entity)
-}
+  public setEntity(id: string, entity: object): Promise<WriteResult> {
+    return this.collection.doc(id).set(entity)
+  }
 
-export function deleteEntityById(collection, id) {
-  return firestore.collection(collection).doc(id).delete()
+  public deleteEntity(id: string): Promise<WriteResult> {
+    return this.collection.doc(id).delete()
+  }
+
 }
