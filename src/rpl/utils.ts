@@ -57,7 +57,7 @@ export default class RplUtils {
                   eqpt: line.substr(line.indexOf('EQPT')).trim().substr(5, line.substr(line.indexOf('EQPT')).trim().indexOf(' ') - 4).trim(),
                   rules: this.flightRules(line.substr(59, line.indexOf('EQPT') - 68).trim())
                 }
-                promises.push(services.setEntity('routes', flightInfo))
+                promises.push(services.setEntity(flightInfo.id, flightInfo))
               }
             })
           }
