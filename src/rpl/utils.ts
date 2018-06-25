@@ -8,7 +8,7 @@ const services = new DBServices('routes')
 export default class RplUtils {
 
   public static hasUpdate(): Promise<boolean> {
-    return rp(`http://portal.cgna.gov.br/files/abas/${moment().format('YYYY-MM-DD')}/painel_rpl/companhias/Cia_GLO_CS.txt`)
+    return rp(`http://portal.cgna.gov.br/files/abas/2018-06-21/painel_rpl/companhias/Cia_GLO_CS.txt`)
       .then(data => true)
       .catch(err => false)
   }
@@ -24,7 +24,7 @@ export default class RplUtils {
   public static updateFIR(fir): Promise<void> {
     console.log(`Creating promises for ${fir}`)
     return rp({
-        url: `http://portal.cgna.gov.br/files/abas/${moment().format('YYYY-MM-DD')}/painel_rpl/bdr/RPL${fir}.zip`,
+        url: `http://portal.cgna.gov.br/files/abas/2018-06-21/painel_rpl/bdr/RPL${fir}.zip`,
         encoding: null
       })
       .then(body => {
@@ -39,8 +39,8 @@ export default class RplUtils {
                 const flightInfo = {
                   id: id,
                   callsign: line.substr(25, 7).trim(),
-                  beginDate: line.substr(3, 6).trim(),
-                  endDate: (line.substr(10, 6).trim() === "UFN") ? null : line.substr(10, 6).trim(),
+                  beginDate: moment(line.substr(3, 6).trim(), "DDMMYY").toISOString(),
+                  endDate: (line.substr(10, 6).trim() === "UFN") ? null : moment(line.substr(10, 6).trim(), "DDMMYY").toISOString(),
                   company: line.substr(25, 3).trim(),
                   flight: parseInt(line.substr(28, 4).trim()),
                   aircraft: line.substr(33, 4).trim(),
