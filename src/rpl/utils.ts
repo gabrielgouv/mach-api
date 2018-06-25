@@ -40,7 +40,7 @@ export default class RplUtils {
                   id: id,
                   callsign: line.substr(25, 7).trim(),
                   beginDate: moment(line.substr(3, 6).trim(), "DDMMYY").toISOString(),
-                  endDate: (line.substr(10, 6).trim() === "UFN") ? null : moment(line.substr(10, 6).trim(), "DDMMYY").toISOString(),
+                  endDate: (line.substr(10, 6).trim() === "UFN") ? null : moment(line.substr(10, 6).trim(), "DDMMYY").add({hours: 23, minutes: 59, seconds: 59, milliseconds: 999}).toISOString(),
                   company: line.substr(25, 3).trim(),
                   flight: parseInt(line.substr(28, 4).trim()),
                   aircraft: line.substr(33, 4).trim(),
