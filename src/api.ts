@@ -1,9 +1,6 @@
 import * as express from 'express'
 import * as cors from 'cors'
-import AirportsRoutes from './airports/routes'
-import FlightsRoutes from './flights/routes'
-import RplRoutes from './rpl/routes'
-import errorHandler from './errors/handler'
+import { flightRoutes } from './flights/flights.router'
 
 class Api {
   public express: express.Application
@@ -16,15 +13,12 @@ class Api {
   middleware(): void {
     this.express.use(cors({ origin: true }))
     this.router()
-    this.express.get('*', (req, res) => res.redirect('https://jpedroh.github.io/mach/#/developers'))
-    this.express.use(errorHandler)
+    this.express.get('*', (_, res) => res.redirect('https://jpedroh.github.io/mach/#/developers'))
   }
 
   private router(): void {
-    AirportsRoutes.routes(this.express)
-    FlightsRoutes.routes(this.express)
-    RplRoutes.routes(this.express)
+    flightRoutes.applyRoutes(this.express)
   }
 }
 
-export default new Api().express
+export const apiInstance = new Api().express

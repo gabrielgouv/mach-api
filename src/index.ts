@@ -1,6 +1,6 @@
 import * as functions from 'firebase-functions'
-import Api from './api'
+import { apiInstance } from './api'
 
 // Export Firebase Functions
-const api = functions.https.onRequest(Api)
+const api = functions.https.onRequest(apiInstance)
 export { api }

@@ -181,6 +181,12 @@
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@protobufjs/utf8/-/utf8-1.1.0.tgz#a777360b5b39a1a2e5106f8e858f2fd2d060c570"
 
+"@types/adm-zip@^0.4.31":
+  version "0.4.31"
+  resolved "https://registry.yarnpkg.com/@types/adm-zip/-/adm-zip-0.4.31.tgz#a3376b9fa8f4c6e9c078c176d2df2caeb7939de3"
+  dependencies:
+    "@types/node" "*"
+
 "@types/body-parser@*":
   version "1.17.0"
   resolved "https://registry.yarnpkg.com/@types/body-parser/-/body-parser-1.17.0.tgz#9f5c9d9bd04bb54be32d5eb9fc0d8c974e6cf58c"

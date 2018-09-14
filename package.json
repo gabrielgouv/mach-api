@@ -19,11 +19,10 @@
     "http-status-codes": "^1.3.0",
     "moment": "^2.22.1",
     "request": "^2.85.0",
-    "request-promise": "^4.2.2",
-    "rp": "^0.2.0",
-    "xml2js": "^0.4.19"
+    "request-promise": "^4.2.2"
   },
   "devDependencies": {
+    "@types/adm-zip": "^0.4.31",
     "firestore": "^1.1.6",
     "tslint": "^5.8.0",
     "typescript": "^2.5.3"
